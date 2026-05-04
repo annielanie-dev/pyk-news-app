@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PYK News — Interactive v3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="phone" id="app">
+    <header class="header">
+      <button class="brand" data-nav="home" aria-label="Strona główna"><span class="brand-title">PYK NEWS</span><span class="brand-subtitle">news in one hit</span></button>
+      <button class="profile-btn" id="profileBtn" aria-label="Profil">A</button>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </header>
+
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="side-menu" id="sideMenu">
+      <button class="close-btn" id="closeMenu">×</button>
+      <p class="panel-kicker">Menu</p>
+      <button data-nav="home">Strona główna</button>
+      <button data-open-filters>Filtry wpisów</button>
+      <button data-nav="settings">Personalizacja</button>
+      <button data-nav="favorites">Ulubione</button>
+    </aside>
+
+    <div class="toast" id="toast"></div>
+
+    <section class="view view-home active" id="homeView">
+      <section class="hero">
+        <div class="hero-copy"><h1>26.04.2026</h1><p>Dzień dobry!</p></div>
+        <img class="hero-pyk" src="PYK.svg" alt="" />
+        <img class="scribble scribble-hero" src="" alt="" />
+      </section>
+
+      <nav class="categories" id="categories" aria-label="Kategorie"></nav>
+
+      <section class="feed-head">
+        <div><div class="eyebrow"><span></span><b id="feedLabel">Dzisiejszy przegląd</b></div><h2 id="feedTitle">Najważniejsze</h2></div>
+        <button class="search" id="searchBtn" aria-label="Szukaj"></button>
+      </section>
+
+      <section class="dynamic-area" id="dynamicArea">
+        <section class="search-box" id="searchBox">
+          <input id="searchInput" type="search" placeholder="Wpisz słowo, np. mObywatel..." />
+          <button id="runSearch">Szukaj</button>
+          <button class="mini-x" id="closeSearch" aria-label="Zamknij wyszukiwarkę">×</button>
+        </section>
+
+        <section class="filters">
+          <div class="filter-control">
+            <button class="filter-trigger" id="editionTrigger">Wydanie</button>
+            <div class="filter-popover" id="editionPopover">
+              <button data-edition="week">Ostatni tydzień</button>
+              <button data-edition="month">Ostatni miesiąc</button>
+              <button data-edition="all">Wszystkie</button>
+              <button data-edition="range">Zakres dat</button>
+              <div class="date-range" id="dateRangeQuick">
+                <input type="date" id="rangeFrom">
+                <input type="date" id="rangeTo">
+                <button id="applyRange">OK</button>
+              </div>
+            </div>
+          </div>
+          <div class="filter-control sort">
+            <button class="filter-trigger" id="sortTrigger">Sortowanie</button>
+            <div class="filter-popover" id="sortPopover">
+              <button data-sort="newest">Najnowsze</button>
+              <button data-sort="oldest">Najstarsze</button>
+            </div>
+          </div>
+        </section>
+
+        <img class="scribble scribble-one" src="Vector2.svg" alt="" />
+        <section class="news-feed" id="newsFeed"></section>
+        <img class="scribble scribble-newsFeed" src="Vector2.svg" alt="" />
+      </section>
+    </section>
+
+    <section class="view view-account" id="accountView">
+      <div class="screen-title"><p class="panel-kicker">Profil</p><h2>Konto</h2></div>
+      <div class="settings-list"><div class="settings-card"><label>Użytkowniczka</label><p class="muted">Ania · konto czytelniczki PYK News</p></div><div class="settings-card"><label>Preferencje konta</label><button class="big-action">Powiadomienia konta</button></div><div class="settings-card"><label>Status</label><p class="muted">Zalogowana lokalnie w prototypie.</p></div></div>
+    </section>
+
+    <section class="view view-settings" id="settingsView">
+      <div class="screen-title"><p class="panel-kicker">Personalizacja</p><h2>Ustawienia apki</h2></div>
+      <div class="settings-list"><div class="settings-card"><label>Akcent neonowy</label><div class="swatches"><button data-accent="#d7ff26" style="--sw:#d7ff26" class="swatch active"></button><button data-accent="#00f0ff" style="--sw:#00f0ff" class="swatch"></button><button data-accent="#ff4fd8" style="--sw:#ff4fd8" class="swatch"></button><button data-accent="#ff8711" style="--sw:#ff8711" class="swatch"></button></div></div><div class="settings-card"><label>Tryb czytania</label><button class="big-action" id="readingMode">Włącz większy tekst</button></div><div class="settings-card"><label>Wygląd aplikacji</label><p class="muted">Tu zostają ustawienia wizualne i zachowania apki.</p></div></div>
+    </section>
+
+    <section class="view view-favorites" id="favoritesView">
+      <div class="screen-title"><p class="panel-kicker">Ulubione</p><h2>Zapisane wpisy</h2></div>
+      <section class="news-feed compact" id="favoritesFeed"></section>
+    </section>
+
+    <nav class="bottom-nav" id="bottomNav">
+      <button data-refresh class="active"><span>↻</span>Odśwież</button>
+      <button data-open-filters><span>☰</span>Filtry</button>
+      <button data-nav="settings"><span>⚙</span>Ustawienia</button>
+      <button data-nav="favorites"><span>♡</span>Ulubione</button>
+    </nav>
+
+    <dialog class="filter-dialog" id="filterDialog">
+      <form method="dialog">
+        <button class="dialog-x" value="cancel" aria-label="Zamknij filtry">×</button>
+        <p class="panel-kicker">Filtry wpisów</p>
+        <h3>Dopasuj przegląd</h3>
+        <label>Kiedy</label>
+        <select id="editionSelect"><option value="week">Ostatni tydzień</option><option value="month">Ostatni miesiąc</option><option value="all">Wszystkie</option><option value="range">Zakres dat</option></select>
+        <div class="dialog-range" id="dialogRange">
+          <input type="date" id="dialogFrom">
+          <input type="date" id="dialogTo">
+        </div>
+        <label>Sortowanie</label>
+        <select id="sortSelect"><option value="newest">Najnowsze</option><option value="oldest">Najstarsze</option></select>
+        <button class="big-action" id="applyFilters">Zastosuj</button>
+      </form>
+    </dialog>
+  </main>
+  <script src="./script.js"></script>
+</body>
+</html>
