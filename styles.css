@@ -462,6 +462,31 @@ button {
     font-weight: 700;
     letter-spacing: 1.2px;
     text-transform: uppercase
+}.tag {
+    position: absolute;
+    top: 32px;
+    left: 23px;
+    height: 22px;
+    padding: 5px 13px 0;
+    border: 1px solid rgba(17, 17, 17, .12);
+    background: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase
+}
+.tag {
+    position: absolute;
+    top: 32px;
+    left: 23px;
+    height: 22px;
+    padding: 5px 13px 0;
+    border: 1px solid rgba(17, 17, 17, .12);
+    background: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase
 }
 
 .heart.active {
