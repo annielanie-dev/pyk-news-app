@@ -9,20 +9,25 @@
     --muted: rgba(18, 18, 18, .62)
 }
 
+html,
 body {
     margin: 0;
+    width: 100%;
+    min-height: 100%;
     background: #f2f5f6;
     font-family: Inter, Arial, sans-serif;
-    color: var(--ink)
+    color: var(--ink);
+    overflow-x: hidden;
 }
 
 .phone {
     position: relative;
-    width: 416px;
-    min-height: 900px;
+    width: 100%;
+    max-width: 416px;
+    min-height: 100dvh;
     margin: 0 auto;
     background: #fff;
-    overflow: hidden
+    overflow: hidden;
 }
 
 .phone.big-text {
@@ -235,10 +240,10 @@ button {
 }
 
 .scribble-hero {
-    right: -14px;
-    bottom: -88px;
-    width: 295px;
-    transform: rotate(180deg)
+    top:40px;
+    left: -30px;
+    width: 292px;
+    transform: rotate(-70deg);
 }
 
 .categories {
@@ -431,7 +436,7 @@ button {
 }
 
 .scribble-one {
-    top: -148px;
+     top: -148px;
     left: -1px;
     width: 417px
 }
@@ -441,27 +446,59 @@ button {
     margin: 0 14px
 }
 
-.card {
+.card { 
     position: relative;
-    height: 328px;
+    min-height: 0;
+    height: auto;
+
     margin-bottom: 15px;
+    padding: 32px 23px 22px;
+
     border: 1px solid var(--line);
     background: rgba(255, 255, 255, .99);
-    overflow: hidden
+    overflow: hidden;
 }
 
 .tag {
-    position: absolute;
-    top: 32px;
-    left: 23px;
-    height: 22px;
-    padding: 5px 13px 0;
+    position: static;
+
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+
+    padding: 6px 13px;
+    margin-bottom: 16px;
+
     border: 1px solid rgba(17, 17, 17, .12);
     background: var(--accent);
+
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 1.2px;
-    text-transform: uppercase
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.card h3 {
+    position: static;
+
+    margin: 0 0 21px;
+    font-size: 14px;
+    line-height: 1.23;
+    font-weight: 600;
+    letter-spacing: -1.05px;
+    text-align: justify;
+}
+
+.card p {
+    position: static;
+
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.26;
+    color: rgba(17, 17, 17, .8);
+    text-align: justify;
 }
 
 .heart.active {
@@ -469,39 +506,37 @@ button {
     background: var(--accent)
 }
 
-.card h3 {
-    position: absolute;
-    left: 23px;
-    right: 23px;
-    top: 70px;
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.23;
-    font-weight: 600;
-    letter-spacing: -1.05px;
-    text-align: justify
-}
-
-.card p {
-    position: absolute;
-    left: 23px;
-    right: 23px;
-    top: 145px;
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.26;
-    color: rgba(17, 17, 17, .8);
-    text-align: justify
-}
-
 .card footer {
-    position: absolute;
-    left: 23px;
-    right: 23px;
-    bottom: 37px;
+    position: static;
+
+    margin-top: 22px;
+
     display: flex;
     align-items: center;
-    justify-content: space-between
+    justify-content: space-between;
+}
+
+.scribble-two {
+    top: 148px;
+    left: -1px;
+    width: 417px
+}
+
+.scribble-four {
+    top: 300px;
+    left: -1px;
+    width: 417px
+}
+
+.scribble-six {
+    top: 600px;
+    left: -1px;
+    width: 417px
+}
+.scribble-eight {
+    top: 1048px;
+    left: -1px;
+    width: 417px
 }
 
 .source-btn {
@@ -619,7 +654,6 @@ button {
     background: rgba(255, 255, 255, .99);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    box-shadow: 0 24px 90px rgba(0, 0, 0, .12)
 }
 
 .bottom-nav button {
@@ -690,14 +724,20 @@ button {
     font-size: 22px
 }
 
-@media(max-width:430px) {
+@media (max-width: 430px) {
+    body {
+        background: #fff;
+    }
+
     .phone {
-        width: 100%;
-        margin: 0
+        width: 100vw;
+        max-width: none;
+        margin: 0;
+        min-height: 100dvh;
     }
 
     .categories {
-        width: calc(100% - 26px)
+        width: calc(100% - 26px);
     }
 }
 
@@ -814,7 +854,6 @@ button {
     left: 0;
     right: 0;
     width: 100%;
-    border-right: 1px solid #121212;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     overflow: visible
 }
@@ -826,5 +865,4 @@ button {
 }
 
 .bottom-nav button:last-child {
-    border-right: 1px solid #121212
 }
