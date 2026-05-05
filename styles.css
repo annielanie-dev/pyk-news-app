@@ -861,8 +861,5 @@ button {
 .bottom-nav button {
     min-width: 0;
     border-color: transparent;
-    border-right: 1px solid var(--line)
-}
-
-.bottom-nav button:last-child {
+    border-right: 1px solid var(--line);
 }
