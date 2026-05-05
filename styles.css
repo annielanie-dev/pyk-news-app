@@ -210,7 +210,7 @@ button {
     position: absolute;
     top: 18px;
     left: 0;
-    z-index: 2
+    z-index: 2;
 }
 
 .hero h1 {
@@ -231,7 +231,28 @@ button {
     left: 0;
     right: 0;
     bottom: 14px;
-    width: 100%
+
+    width: 100%;
+    height: auto;
+
+    display: block;
+    z-index: 1;
+}
+
+.hero-pyk-accent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 14px;
+
+    width: 100%;
+    height: auto;
+
+    display: block;
+    z-index: 1;
+    fill: var(--accent);
+    stroke: black;
+    stroke-opacity: 0.34;
 }
 
 .scribble {
@@ -452,7 +473,7 @@ button {
     height: auto;
 
     margin-bottom: 15px;
-    padding: 32px 23px 22px;
+    padding: 32px 28px 22px;
 
     border: 1px solid var(--line);
     background: rgba(255, 255, 255, .99);
@@ -499,6 +520,14 @@ button {
     line-height: 1.26;
     color: rgba(17, 17, 17, .8);
     text-align: justify;
+    text-align-last: left;
+
+    hyphens: auto;
+    -webkit-hyphens: auto;
+
+    overflow-wrap: break-word;
+    word-break: normal;
+    word-spacing: normal;
 }
 
 .heart.active {
