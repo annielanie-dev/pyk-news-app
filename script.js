@@ -236,7 +236,68 @@ const posts = [{ id: 1, category: "Polska", edition: "week", importance: 9, date
   source: "Tech Brief",
   title: "Interfejsy aplikacji informacyjnych stają się prostsze i bardziej modułowe.",
   body: "Projektanci ograniczają liczbę elementów na ekranie, dodają większe odstępy i szybkie przełączniki tematów."
-} ];
+},
+{
+  id: 31,
+  category: "Polska",
+  edition: "today",
+  importance: 10,
+  date: todayISO(),
+  source: "PAP",
+  title: "Nowe cyfrowe usługi publiczne są dziś najczęściej wybieranym tematem w serwisach informacyjnych.",
+  body: "Użytkownicy sprawdzają głównie informacje o dokumentach, terminach urzędowych i szybkich płatnościach online."
+},
+{
+  id: 32,
+  category: "Polska",
+  edition: "today",
+  importance: 8,
+  date: todayISO(),
+  source: "gov.pl",
+  title: "Administracja przypomina o możliwości załatwiania spraw urzędowych przez internet.",
+  body: "Największe zainteresowanie dotyczą dziś wniosków online, powiadomień SMS oraz usług dostępnych w aplikacjach mobilnych."
+},
+{
+  id: 33,
+  category: "Polska",
+  edition: "today",
+  importance: 7,
+  date: todayISO(),
+  source: "Pyk Desk",
+  title: "Krótki przegląd dnia: najważniejsze zmiany i komunikaty dla użytkowników usług publicznych.",
+  body: "W jednym miejscu zebrano najważniejsze informacje dotyczące dokumentów, terminów, zgłoszeń i cyfrowej obsługi spraw."
+},
+{
+  id: 34,
+  category: "Live",
+  edition: "today",
+  importance: 10,
+  date: todayISO(),
+  source: "Live Feed",
+  title: "Na żywo: dzisiejsze aktualizacje pojawiają się w krótkich blokach.",
+  body: "Relacja zbiera szybkie komunikaty z kraju, świata i technologii. Najważniejsze wpisy trafiają na górę listy."
+},
+{
+  id: 35,
+  category: "Pozytywy",
+  edition: "today",
+  importance: 8,
+  date: todayISO(),
+  source: "Good News",
+  title: "Lokalne inicjatywy społeczne zyskują dziś większą widoczność w mediach.",
+  body: "Najczęściej pojawiają się akcje sąsiedzkie, zbiórki rzeczy, warsztaty i wydarzenia organizowane przez biblioteki."
+},
+{
+  id: 36,
+  category: "Technologia",
+  edition: "today",
+  importance: 8,
+  date: todayISO(),
+  source: "Tech Brief",
+  title: "Aplikacje informacyjne coraz mocniej stawiają na szybkie podsumowania dnia.",
+  body: "Projektanci upraszczają ekrany startowe, dodają krótsze bloki tekstu i filtry pomagające szybko znaleźć najważniejsze tematy."
+}
+];
 const state = { 
   category: "Polska", 
   query: "", 
