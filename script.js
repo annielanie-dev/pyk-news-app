@@ -237,7 +237,15 @@ const posts = [{ id: 1, category: "Polska", edition: "week", importance: 9, date
   title: "Interfejsy aplikacji informacyjnych stają się prostsze i bardziej modułowe.",
   body: "Projektanci ograniczają liczbę elementów na ekranie, dodają większe odstępy i szybkie przełączniki tematów."
 } ];
-const state = { category: "Polska", query: "", pendingQuery: "", edition: "week", sort: "newest", view: "home", favorites: JSON.parse(localStorage.getItem("pykFavs") || "[]") };
+const state = { 
+  category: "Polska", 
+  query: "", 
+  pendingQuery: "", 
+  edition: "today", 
+  sort: "newest", 
+  view: "home", 
+  favorites: JSON.parse(localStorage.getItem("pykFavs") || "[]") 
+};
 const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
 const feed = $("#newsFeed"), favFeed = $("#favoritesFeed"), toast = $("#toast"), app = $("#app"), navEl = $("#bottomNav");
 function showToast(t) { toast.textContent = t; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 1600) }
@@ -245,16 +253,74 @@ function saveFavs() { localStorage.setItem("pykFavs", JSON.stringify(state.favor
 function openDrawer() { $("#sideMenu").classList.add("open"); $("#drawerBackdrop").classList.add("open"); }
 function closeDrawer() { $("#sideMenu").classList.remove("open"); $("#drawerBackdrop").classList.remove("open"); }
 function categories() { const cats = ["Polska", "Świat", "Pozytywy", "Twórcy", "Live", "Technologia"]; $("#categories").innerHTML = cats.map(c => `<button class="pill ${state.category === c ? "active" : ""}" data-cat="${c}">${c}</button>`).join(""); $$(".pill").forEach(b => b.onclick = () => { state.category = b.dataset.cat; render(); }); }
-function filtered(onlyFav = false) { let arr = [...posts]; if (onlyFav) arr = arr.filter(p => state.favorites.includes(p.id)); else arr = arr.filter(p => p.category === state.category); if (state.edition !== "all" && state.edition !== "range") arr = arr.filter(p => state.edition === "week" ? true : state.edition === "month" ? true : true); if (state.query.trim()) { const q = state.query.toLowerCase(); arr = arr.filter(p => (p.title + " " + p.body + " " + p.source).toLowerCase().includes(q)); } if (state.sort === "newest") arr.sort((a, b) => b.date.localeCompare(a.date)); if (state.sort === "oldest") arr.sort((a, b) => a.date.localeCompare(b.date)); return arr }
+function filtered(onlyFav = false) { let arr = [...posts]; if (onlyFav) arr = arr.filter(p => state.favorites.includes(p.id)); else arr = arr.filter(p => p.category === state.category); if (state.edition === "today") {
+  const today = todayISO();
+  arr = arr.filter(p => p.date === today);
+} else if (state.edition !== "all" && state.edition !== "range") {
+  arr = arr.filter(p =>
+    state.edition === "week" ? true :
+    state.edition === "month" ? true :
+    true
+  );
+} if (state.query.trim()) { const q = state.query.toLowerCase(); arr = arr.filter(p => (p.title + " " + p.body + " " + p.source).toLowerCase().includes(q)); } if (state.sort === "newest") arr.sort((a, b) => b.date.localeCompare(a.date)); if (state.sort === "oldest") arr.sort((a, b) => a.date.localeCompare(b.date)); return arr }
 function card(p) { const fav = state.favorites.includes(p.id); return `<article class="card"><div class="tag">${p.category}</div><h3>${p.title}</h3><p>${p.body}</p><footer><button class="heart ${fav ? "active" : ""}" data-save="${p.id}">${fav ? "♥" : "♡"}</button><button class="source-btn" data-source="${p.source}">${p.source}</button><button class="share" data-share="${p.id}">↗</button></footer></article>` }
 function wireActions() { $$("[data-save]").forEach(b => b.onclick = () => { const id = +b.dataset.save; state.favorites = state.favorites.includes(id) ? state.favorites.filter(x => x !== id) : [...state.favorites, id]; saveFavs(); render(); showToast(state.favorites.includes(id) ? "Dodano do ulubionych" : "Usunięto z ulubionych") }); $$(".source-btn").forEach(b => b.onclick = () => showToast("Źródło: " + b.dataset.source)); $$(".share").forEach(b => b.onclick = async () => { const p = posts.find(x => x.id == b.dataset.share); const text = `${p.title} — ${p.source}`; try { if (navigator.share) await navigator.share({ title: "PYK News", text }); else await navigator.clipboard.writeText(text); showToast("Udostępnianie gotowe / skopiowano"); } catch (e) { showToast("Udostępnianie anulowane") } }); }
 function adjustLayout() { requestAnimationFrame(() => { let contentBottom = 0; if (state.view === "home") { const box = $("#dynamicArea"); contentBottom = box.offsetTop + box.offsetHeight; } else if (state.view === "favorites") { contentBottom = Math.max(720, $("#favoritesFeed").offsetTop + $("#favoritesFeed").offsetHeight); } else { const list = document.querySelector("#" + state.view + "View .settings-list"); contentBottom = list ? list.offsetTop + list.offsetHeight : 420; } navEl.style.top = (contentBottom + 18) + "px"; app.style.minHeight = (contentBottom + 18 + 76) + "px"; }); }
+function setTodayDate() {
+  const todayDateEl = document.querySelector("#todayDate");
+
+  if (!todayDateEl) return;
+
+  const today = new Date();
+
+  const formattedDate = new Intl.DateTimeFormat("pl-PL", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(today);
+
+  todayDateEl.textContent = formattedDate;
+}
+
+setTodayDate();
+
+// opcjonalnie: sprawdza co minutę, gdyby apka była otwarta przez północ
+setInterval(setTodayDate, 60 * 1000);
+
+render();
+
 function render() { categories(); $("#feedTitle").textContent = state.category === "Live" ? "Live feed" : "Najważniejsze"; $("#feedLabel").textContent = state.query ? `Wyniki dla: ${state.query}` : "Dzisiejszy przegląd"; $("#editionTrigger").textContent = editionLabel(state.edition); $("#sortTrigger").textContent = sortLabel(state.sort); $("#editionSelect").value = state.edition; $("#sortSelect").value = state.sort; const arr = filtered(false); feed.innerHTML = (arr.length ? arr.map(card).join("") : `<div class="empty">Brak wpisów dla tych ustawień. Zmień kategorię, wyszukiwanie albo filtry.</div>`); const favs = filtered(true); favFeed.innerHTML = favs.length ? favs.map(card).join("") : `<div class="empty">Nie masz jeszcze ulubionych wpisów. Kliknij serce przy newsie, a pojawi się tutaj.</div>`; wireActions(); adjustLayout(); }
 function nav(view) { state.view = view; $$(".view").forEach(v => v.classList.remove("active")); $("#" + view + "View").classList.add("active"); $$(".bottom-nav button").forEach(b => b.classList.toggle("active", (view === "home" && b.hasAttribute("data-refresh")) || b.dataset.nav === view)); $("#profileBtn").classList.toggle("active", view === "account"); closeDrawer(); render(); }
 $("#menuBtn").onclick = openDrawer; $("#closeMenu").onclick = closeDrawer; $("#drawerBackdrop").onclick = closeDrawer; $("#profileBtn").onclick = () => { nav("account"); showToast("Otworzono ustawienia konta") };
-$$("[data-nav]").forEach(b => b.onclick = () => nav(b.dataset.nav)); $$("[data-refresh]").forEach(b => b.onclick = () => { state.query = ""; state.pendingQuery = ""; $("#searchInput").value = ""; $("#searchBox").classList.remove("open"); state.category = "Polska"; state.edition = "week"; state.sort = "newest"; nav("home"); showToast("Odświeżono przegląd") }); $$("[data-open-filters]").forEach(b => b.onclick = () => { $("#filterDialog").showModal(); closeDrawer(); });
+$$("[data-nav]").forEach(b => b.onclick = () => nav(b.dataset.nav)); $$("[data-refresh]").forEach(b => b.onclick = () => {
+  state.query = "";
+  state.pendingQuery = "";
+  $("#searchInput").value = "";
+  $("#searchBox").classList.remove("open");
+  state.category = "Polska";
+  state.edition = "today";
+  state.sort = "newest";
+  nav("home");
+  showToast("Odświeżono przegląd");
+}); $$("[data-open-filters]").forEach(b => b.onclick = () => { $("#filterDialog").showModal(); closeDrawer(); });
 $("#searchBtn").onclick = () => { $("#searchBox").classList.add("open"); $("#searchInput").focus(); adjustLayout(); }; $("#closeSearch").onclick = () => { $("#searchBox").classList.remove("open"); state.pendingQuery = ""; state.query = ""; $("#searchInput").value = ""; render(); }; $("#searchInput").oninput = e => { state.pendingQuery = e.target.value; }; $("#searchInput").addEventListener("keydown", e => { if (e.key === "Enter") { state.query = state.pendingQuery; render(); } }); $("#runSearch").onclick = () => { state.query = state.pendingQuery; render(); showToast(state.query ? `Szukam: ${state.query}` : "Wpisz słowo do wyszukania") };
-function editionLabel(v) { return v === "week" ? "Ostatni tydzień" : v === "month" ? "Ostatni miesiąc" : v === "all" ? "Wszystkie" : v === "range" ? "Zakres dat" : "Wydanie" }
+function editionLabel(v) {
+  return v === "today" ? "Dzisiaj" :
+         v === "week" ? "Ostatni tydzień" :
+         v === "month" ? "Ostatni miesiąc" :
+         v === "all" ? "Wszystkie" :
+         v === "range" ? "Zakres dat" :
+         "Wydanie";
+}
+function todayISO() {
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
 function sortLabel(v) { return v === "oldest" ? "Najstarsze" : "Najnowsze" }
 $("#editionTrigger").onclick = () => { $("#editionPopover").classList.toggle("open"); $("#sortPopover").classList.remove("open") };
 $("#sortTrigger").onclick = () => { $("#sortPopover").classList.toggle("open"); $("#editionPopover").classList.remove("open") };
@@ -266,4 +332,9 @@ $("#editionSelect").onchange = e => { $("#dialogRange").classList.toggle("open",
 $("#applyFilters").onclick = () => { state.edition = $("#editionSelect").value; state.sort = $("#sortSelect").value; render(); $("#dialogRange").classList.toggle("open", state.edition === "range"); showToast("Filtry zastosowane") };
 $$(".swatch").forEach(b => b.onclick = () => { $$(".swatch").forEach(x => x.classList.remove("active")); b.classList.add("active"); document.documentElement.style.setProperty("--accent", b.dataset.accent); });
 $("#readingMode").onclick = () => { app.classList.toggle("big-text"); $("#readingMode").textContent = app.classList.contains("big-text") ? "Wyłącz większy tekst" : "Włącz większy tekst"; adjustLayout() };
-window.addEventListener("resize", adjustLayout); render();
+window.addEventListener("resize", adjustLayout);
+
+setTodayDate();
+setInterval(setTodayDate, 60 * 1000);
+
+render();

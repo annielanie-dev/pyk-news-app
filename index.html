@@ -39,7 +39,7 @@
     </svg>
 
     <div class="hero-copy">
-        <h1>26.04.2026</h1>
+        <h1 id="todayDate">26.04.2026</h1>
         <p>Dzień dobry!</p>
     </div>
 </section>
@@ -63,8 +63,9 @@
           <div class="filter-control">
             <button class="filter-trigger" id="editionTrigger">Wydanie</button>
             <div class="filter-popover" id="editionPopover">
-              <button data-edition="week">Ostatni tydzień</button>
-              <button data-edition="month">Ostatni miesiąc</button>
+             <button data-edition="today">Dzisiaj</button>
+<button data-edition="week">Ostatni tydzień</button>
+<button data-edition="month">Ostatni miesiąc</button>
               <button data-edition="all">Wszystkie</button>
               <button data-edition="range">Zakres dat</button>
               <div class="date-range" id="dateRangeQuick">
@@ -121,7 +122,13 @@
         <p class="panel-kicker">Filtry wpisów</p>
         <h3>Dopasuj przegląd</h3>
         <label>Kiedy</label>
-        <select id="editionSelect"><option value="week">Ostatni tydzień</option><option value="month">Ostatni miesiąc</option><option value="all">Wszystkie</option><option value="range">Zakres dat</option></select>
+        <select id="editionSelect">
+  <option value="today">Dzisiaj</option>
+  <option value="week">Ostatni tydzień</option>
+  <option value="month">Ostatni miesiąc</option>
+  <option value="all">Wszystkie</option>
+  <option value="range">Zakres dat</option>
+</select>
         <div class="dialog-range" id="dialogRange">
           <input type="date" id="dialogFrom">
           <input type="date" id="dialogTo">
